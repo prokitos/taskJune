@@ -6,33 +6,65 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-// получить.  (exchange_name, pair string) => OrderBook. Asks? Bids?
+// Users godoc
+// @Summary get DepthOrder by name or pair
+// @Description get DepthOrder by name or pair
+// @Tags DepthOrder
+// @Accept  json
+// @Produce  json
+// @Param exchange_name query string false "Show by exchange_name"
+// @Param pair query string false "Show by pair"
+// @Success 200 "successful operation"
+// @Router /GetOrderBook [get]
 func RouteGetBook(c *fiber.Ctx) error {
 
-	_, res := services.GetOrderBook(c)
-
-	return res
-
+	res, err := services.GetOrderBook(c)
+	return c.Status(fiber.StatusAccepted).JSON(fiber.Map{"status": err.Error(), "data": res})
 }
 
-// записать (exchange_name pair string []*DepthOrder) => OrderBook. asks? bids?
+// Users godoc
+// @Summary insert orderBook
+// @Description insert orderBook
+// @Tags DepthOrder
+// @Accept  json
+// @Produce  json
+// @Param exchange_name query string false "insert order"
+// @Param pair query string false "insert order"
+// @Param orderBook body models.ArrayDepthOrderSwag true "Insert order"
+// @Success 200 "successful operation"
+// @Router /SaveOrderBook [post]
 func RouteSaveBook(c *fiber.Ctx) error {
 
-	return services.SaveOrderBook(c)
-
+	err := services.SaveOrderBook(c)
+	return c.Status(fiber.StatusAccepted).JSON(fiber.Map{"status": err.Error()})
 }
 
-// получить. (Client) => []HistoryOrder. видимо можно искать только по имени, или по имени и чемуто ещё...
+// Users godoc
+// @Summary get order History
+// @Description get order History
+// @Tags DepthOrder
+// @Accept  json
+// @Produce  json
+// @Param client query models.ClientSwag false "Show by client"
+// @Success 200 "successful operation"
+// @Router /GetOrderHistory [get]
 func RouteGetHistory(c *fiber.Ctx) error {
 
-	_, res := services.GetOrderHistory(c)
-	return res
-
+	res, err := services.GetOrderHistory(c)
+	return c.Status(fiber.StatusAccepted).JSON(fiber.Map{"status": err.Error(), "data": res})
 }
 
-// записать (Client, HistoryOrder) => Client, HistoryOrder
+// Users godoc
+// @Summary save order
+// @Description save order
+// @Tags DepthOrder
+// @Accept  json
+// @Produce  json
+// @Param clientHistory body models.ClientAndHistorySwag false "insert client and history"
+// @Success 200 "successful operation"
+// @Router /SaveOrder [post]
 func RouteSaveClient(c *fiber.Ctx) error {
 
-	return services.SaveOrder(c)
-
+	err := services.SaveOrder(c)
+	return c.Status(fiber.StatusAccepted).JSON(fiber.Map{"status": err.Error()})
 }

@@ -7,6 +7,7 @@ import (
 	"github.com/ilyakaznacheev/cleanenv"
 )
 
+// получение конфигов из файла, добавление их в структуру, и возврат этой структуры.
 func ConfigMustLoad() *models.Config {
 
 	path := "internal/config/local.yaml"

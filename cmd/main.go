@@ -11,6 +11,20 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// @title User API
+// @version 1.0
+// @description This is a sample service for managing users
+// @termsOfService http://swagger.io/terms/
+// @contact.name API Support
+// @contact.email soberkoder@gmail.com
+// @license.name Apache 2.0
+// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+// @host localhost:8888
+// @BasePath /
+// @securityDefinitions.apikey Bearer
+// @in header
+// @name Authorization
+// @description Type "Bearer" followed by a space and JWT token.
 func main() {
 
 	// установка логов. установка чтобы показывать логи debug уровня
@@ -21,7 +35,11 @@ func main() {
 	cfg := config.ConfigMustLoad()
 
 	// миграция и подключение к бд.
-	database.CheckDatabaseCreated(cfg.Connect)
+	err := database.CheckDatabaseCreated(cfg.Connect)
+	if err != nil {
+		return
+	}
+
 	database.OpenConnection(cfg.Connect)
 	database.StartMigration()
 

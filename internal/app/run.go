@@ -13,10 +13,12 @@ type App struct {
 	Server *fiber.App
 }
 
+// запуск сервера с портом, указаным в конфиге
 func (a *App) NewServer(port models.ServerConfig) {
 	a.Server = server.ServerStart(port)
 }
 
+// безопасное выключение сервера.
 func (a *App) Stop() {
 
 	// пытается выключить сервер, а если не получится, то через 60 секунд экстренно сбросит соединение

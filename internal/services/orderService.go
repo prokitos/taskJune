@@ -5,17 +5,19 @@ import (
 	"module/internal/models"
 
 	"github.com/gofiber/fiber/v2"
+	log "github.com/sirupsen/logrus"
 )
 
-func GetOrderBook(c *fiber.Ctx) ([]*models.DepthOrder, error) {
+// показать цены покупки/продажи
+func GetOrderBook(c *fiber.Ctx) ([]models.DepthOrder, error) {
 
 	exchangeName := c.Query("exchange_name", "")
 	pair := c.Query("pair", "")
 
-	_, res := database.ShowBooks(c, exchangeName, pair)
-	return nil, res
+	return database.ShowBooks(c, exchangeName, pair)
 }
 
+// записать цены покупки/продажи
 func SaveOrderBook(c *fiber.Ctx) error {
 
 	exchangeName := c.Query("exchange_name", "")
@@ -23,31 +25,35 @@ func SaveOrderBook(c *fiber.Ctx) error {
 
 	var orderBooks models.ArrayDepthOrder
 	if err := c.BodyParser(&orderBooks); err != nil {
-		return c.SendStatus(fiber.StatusBadRequest)
+		log.Error("Error body parsing at SaveOrderBook")
+		log.Debug(err)
+		return models.ResponseBadRequest()
 	}
 
-	res := database.CreateBooks(c, exchangeName, pair, orderBooks.Array)
-	return res
+	return database.CreateBooks(c, exchangeName, pair, orderBooks.Array)
 }
 
-func GetOrderHistory(c *fiber.Ctx) ([]*models.HistoryOrder, error) {
+// показать историю транзакций
+func GetOrderHistory(c *fiber.Ctx) ([]models.HistoryOrder, error) {
 
 	var client models.Client
-	if err := c.BodyParser(&client); err != nil {
-		return nil, c.SendStatus(fiber.StatusBadRequest)
-	}
+	client.Client_name = c.Query("client_name", "")
+	client.Exchange_name = c.Query("exchange_name", "")
+	client.Label = c.Query("label", "")
+	client.Pair = c.Query("pair", "")
 
-	_, res := database.ShowHistory(c, client)
-	return nil, res
+	return database.ShowHistory(c, client)
 }
 
+// добавить ордер в историю и клиенту
 func SaveOrder(c *fiber.Ctx) error {
 
 	var clientHistory models.ClientAndHistory
 	if err := c.BodyParser(&clientHistory); err != nil {
-		return c.SendStatus(fiber.StatusBadRequest)
+		log.Error("Error body parsing at GetOrderHistory")
+		log.Debug(err)
+		return models.ResponseBadRequest()
 	}
 
-	res := database.CreateOrder(c, clientHistory.Client, clientHistory.History)
-	return res
+	return database.CreateOrder(c, clientHistory.Client, clientHistory.History)
 }

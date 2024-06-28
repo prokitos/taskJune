@@ -1,0 +1,201 @@
+basePath: /
+definitions:
+  models.ArrayDepthOrderSwag:
+    properties:
+      array:
+        items:
+          $ref: '#/definitions/models.DepthOrderSwag'
+        type: array
+    type: object
+  models.ClientAndHistorySwag:
+    properties:
+      client:
+        $ref: '#/definitions/models.ClientSwag'
+      history:
+        $ref: '#/definitions/models.HistoryOrderSwag'
+    type: object
+  models.ClientSwag:
+    properties:
+      client_name:
+        example: Artem
+        type: string
+      exchange_name:
+        example: ""
+        type: string
+      label:
+        example: ""
+        type: string
+      pair:
+        example: ""
+        type: string
+    type: object
+  models.DepthOrderSwag:
+    properties:
+      baseQty:
+        example: 95
+        type: number
+      price:
+        example: 120
+        type: number
+    type: object
+  models.HistoryOrderSwag:
+    properties:
+      algorithm_name_placed:
+        example: ""
+        type: string
+      base_qty:
+        example: 10
+        type: number
+      client_name:
+        example: Artem
+        type: string
+      commission_quote_qty:
+        example: 12
+        type: number
+      exchange_name:
+        example: ""
+        type: string
+      highest_buy_prc:
+        example: 150
+        type: number
+      label:
+        example: ""
+        type: string
+      lowest_sell_prc:
+        example: 100
+        type: number
+      pair:
+        example: rub-eur
+        type: string
+      price:
+        example: 112.7
+        type: number
+      side:
+        example: ""
+        type: string
+      time_placed:
+        example: "2017-07-21T17:32:28Z"
+        type: string
+      type:
+        example: ""
+        type: string
+    type: object
+host: localhost:8888
+info:
+  contact:
+    email: soberkoder@gmail.com
+    name: API Support
+  description: This is a sample service for managing users
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: User API
+  version: "1.0"
+paths:
+  /GetOrderBook:
+    get:
+      consumes:
+      - application/json
+      description: get DepthOrder by name or pair
+      parameters:
+      - description: Show by exchange_name
+        in: query
+        name: exchange_name
+        type: string
+      - description: Show by pair
+        in: query
+        name: pair
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: successful operation
+      summary: get DepthOrder by name or pair
+      tags:
+      - DepthOrder
+  /GetOrderHistory:
+    get:
+      consumes:
+      - application/json
+      description: get order History
+      parameters:
+      - example: Artem
+        in: query
+        name: client_name
+        type: string
+      - example: ""
+        in: query
+        name: exchange_name
+        type: string
+      - example: ""
+        in: query
+        name: label
+        type: string
+      - example: ""
+        in: query
+        name: pair
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: successful operation
+      summary: get order History
+      tags:
+      - DepthOrder
+  /SaveOrder:
+    post:
+      consumes:
+      - application/json
+      description: save order
+      parameters:
+      - description: insert client and history
+        in: body
+        name: clientHistory
+        schema:
+          $ref: '#/definitions/models.ClientAndHistorySwag'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: successful operation
+      summary: save order
+      tags:
+      - DepthOrder
+  /SaveOrderBook:
+    post:
+      consumes:
+      - application/json
+      description: insert orderBook
+      parameters:
+      - description: insert order
+        in: query
+        name: exchange_name
+        type: string
+      - description: insert order
+        in: query
+        name: pair
+        type: string
+      - description: Insert order
+        in: body
+        name: orderBook
+        required: true
+        schema:
+          $ref: '#/definitions/models.ArrayDepthOrderSwag'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: successful operation
+      summary: insert orderBook
+      tags:
+      - DepthOrder
+securityDefinitions:
+  Bearer:
+    description: Type "Bearer" followed by a space and JWT token.
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

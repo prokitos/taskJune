@@ -38,14 +38,3 @@ type DepthOrder struct {
 	BaseQty float64 `json:"baseQty" example:""`
 	Owner   int64   `json:"owner" example:""`
 }
-
-// структуры для запросов и свагеров.
-
-type ClientAndHistory struct {
-	Client  Client
-	History HistoryOrder
-}
-
-type ArrayDepthOrder struct {
-	Array []DepthOrder
-}
