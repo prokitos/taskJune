@@ -16,3 +16,5 @@ POST	http://localhost:8888/SaveOrder
 примеры использований роутов можно посмотреть в сваггере.
 http://localhost:8888/swagger/index.html	
 
+запуск тестов
+go test -v -cover ./...
