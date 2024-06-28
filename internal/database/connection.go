@@ -63,7 +63,9 @@ func StartMigration() {
 
 	GlobalHandler.AutoMigrate(models.HistoryOrder{})
 	GlobalHandler.AutoMigrate(models.Client{})
-	//GlobalHandler.AutoMigrate(models.OrderBook{})
+
+	GlobalHandler.AutoMigrate(models.DepthOrder{})
+	GlobalHandler.AutoMigrate(models.OrderBook{})
 
 	log.Info("migration complete")
 

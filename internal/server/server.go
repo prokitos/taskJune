@@ -20,14 +20,9 @@ func ServerStart(port models.ServerConfig) *fiber.App {
 
 func handlers(instance *fiber.App) {
 
-	instance.Get("/book", zaglushka)
-	instance.Post("/book", zaglushka)
+	instance.Get("/GetOrderBook", RouteGetBook)
+	instance.Post("/SaveOrderBook", RouteSaveBook)
 
-	instance.Get("/client", zaglushka)
-	instance.Post("/client", zaglushka)
-
-}
-
-func zaglushka(c *fiber.Ctx) error {
-	return models.ResponseGood()
+	instance.Get("/GetOrderHistory", RouteGetHistory)
+	instance.Post("/SaveOrder", RouteSaveClient)
 }
